@@ -1,5 +1,5 @@
 #include "../inc/block.h"
-#include "../inc/crypt_interface.h"
+#include "../inc/encryption.h"
 
 int main() {
 

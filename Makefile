@@ -12,7 +12,7 @@ OBJ=main.o
 
 EXE=a.out
 
-main.o: src/main.cpp
+main.o: src/main.cpp src/encryption.cpp
 	$(CPP) $(CPPFLAGS) -c $< -o $@
 
 # %.o: src/%.cpp
