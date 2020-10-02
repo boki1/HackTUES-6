@@ -133,10 +133,11 @@ namespace ns_chain {
 
 
         public:
-            int BlockTrnPrepare()
+            int BlockTransmitPrepare()
             {
                time_t _now = time(0) ;
                HASH_TOGETHER(this->bl_header.root_hash, _now);
+
                // todo:
                // do smth with this combined hash
             }
