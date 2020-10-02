@@ -2,20 +2,13 @@
 
 namespace ns_chain {
 
-    class Chain {
+    using namespace ns_block;
 
-        
-
-    };
-
-
-
-    namespace ns_block {
-
+    BlockHeader::BlockHeader() {
+        this->nonce = nullptr;
+        this->previous = nullptr;
     }
 
-    namespace ns_node {
-
-    }
-
+    BlockHeader &BlockHeader::operator=(const BlockHeader &other) = default;
 }
+

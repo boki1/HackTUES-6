@@ -1,201 +1,119 @@
-
 #ifndef HACKTUES6_BLOCK_H
 #define HACKTUES6_BLOCK_H
 
 #include <ctime>
 #include <cstdint>
+#include <assert.h>
 #include <cstring>
 
 #include "crypt_interface.h"
 
 namespace ns_chain {
+
     namespace ns_block {
+
+        class Message {
+
+        public:
+            Message();
+            Message(const char *, DS);
+
+        private:
+            static const char MSG_BYTES = 3;
+
+            char msg_data[MSG_BYTES]; // TODO: figure out some 'protocol' for the data stored in the data field
+            time_t timestamp;
+            DS digital_sign;
+            uint8_t flags;
+        };
 
         class MessagePool {
 
         private:
-            class Message {
-            public:
-                Message()
-                    : msg_data(nullptr), signature(nullptr), flags(0)
-                {
-                    timestamp = std::time(nullptr);
-                }
-
-                Message(char *_msg_data, time_t &_timestamp, DS _signature, uint32_t &_flags)
-                    : msg_data(_msg_data), signature(_signature), flags(_flags)
-                {
-                    timestamp = std::time(nullptr);
-                }
-
-                ~Message() {
-                    delete[] msg_data;
-
-                    // todo: check whether new is called on signature
-                    // delete[] signature;
-                }
-
-            private:
-                char *msg_data; // TODO: figure out some 'protocol' for the data stored in the data field
-                time_t timestamp;
-                DS signature;
-                uint32_t flags;
-            };
-
-        private:
-            static const int N_MESG_POOL = 3;
+            // todo: set some usable value
+            static const int N_MESG_POOL = 0;
             Message pool[N_MESG_POOL];
 
         public:
             MessagePool();
-            ~MessagePool();
-            MessagePool &operator=(const MessagePool &other)
-            {
-                // todo:
-                // NOT BUG-FREE
-                memcpy(this->pool, other.pool, sizeof(Message) * N_MESG_POOL);
-            }
         };
 
-        MessagePool::MessagePool() {
-
-           // initialize an empty message pool w/ empty messages
-           // note: this->timestamp is equal to the CURRENT TIME; cannot be initizalized manually
-           for (auto msg: this->pool) {
-               msg = Message();
-           }
-
-        }
-
-        MessagePool::~MessagePool() {}
-
-        namespace ns_header {
-
-            class MerkleNode {
-            public:
-                MerkleNode();
-                ~MerkleNode();
-
-
-            private:
-                HASH _hash;
-                MerkleNode &left, &right;
-            };
-
-            class MerkleTree {
-
-                MerkleTree();
-                ~MerkleTree();
-
-                bool MerkleRootCheck(MessagePool &);
-
-            private:
-                MerkleNode &root;
-
-            };
-
-            bool MerkleTree::MerkleRootCheck(MessagePool &m_pool) {
-
-            }
-
-            class BlockHeader {
-
-            public:
-                BlockHeader() : msgs(MessagePool()){
-                    // todo:
-                    // set proper initial value for field `nonce`
-                    this->nonce = 0;
-
-                    // set proper initial value for field `previos`
-                    this->previous = 0;
-                }
-
-                BlockHeader &operator=(const BlockHeader &other)
-                {
-                    this->previous = other.previous;
-                    this->nonce = other.nonce;
-                    this->msgs = other.msgs;
-                }
-
-                ~BlockHeader();
-
-            private:
-                MessagePool msgs;
-                HASH nonce;
-                HASH previous;
-            };
-
-        }
-
-        class Block {
-        private:
-            ns_header::BlockHeader bl_header;
-
+        class BlockHeader {
 
         public:
-            int BlockTransmitPrepare()
-            {
-               time_t _now = time(0) ;
-               HASH_TOGETHER(this->bl_header.root_hash, _now);
+            BlockHeader();
+            BlockHeader &operator=(const BlockHeader &other);
 
-               // todo:
-               // do smth with this combined hash
-            }
+        private:
+            HASH nonce;
+            HASH previous;
+        };
 
-            Block &operator=(Block &other) {
-                this->bl_header = other.bl_header;
-            }
+        class Block {
 
+        private:
+            MessagePool bl_pool;
+            BlockHeader bl_header;
+
+        public:
             Block() {}
-            ~Block() {}
-            Block(const Block &other) {
-               this->bl_header = other.bl_header;
-            }
+
+            Block &operator=(Block &other) = default;
+
+        public:
+
+
         };
 
     }
 
     namespace ns_node {
-        /*
-         * Used to descrive a 'device node'; each "station" is a device node w/ a unique 'id'
-         */
-        class DevNode {
+
+        enum DevState {
+            IDLE = 0,
+            BL_RECV,
+            BL_TRNS,
+            BL_VERF,
+
+            D_TERMINATE
+        } ;
+
+        static const unsigned short MAC_BYTES = 2;
+
+        // todo:
+        // make sure the masks are appropriate for the data type of the arguments
+        static int *MACAddr(int _ints[], int count) {
+            assert(count == 6);
+            int *mac = new int[2];
+            mac[0] = (0x0 | (_ints[0] & 0xFF000000));
+            mac[0] |= (_ints[1] & 0x00FF0000);
+            mac[0] |= (_ints[2] & 0x0000FF00);
+            mac[0] |= (_ints[3] & 0x000000FF);
+            mac[1] |= (_ints[4] & 0xFF000000);
+            mac[1] |= (_ints[5] & 0x00FF0000);
+            return mac;
+        }
+
+        class DeviceNode {
 
         private:
-            uint32_t flags;
-            MAC_ADDR unique_id;
+            // MAC is actually 6B, but we get 8B
+            int dev_mac[2];
 
-            enum DevNodeState {
-                IDLE,
-                BL_RECV,
-                BL_TRNS,
-                BL_VERF
-            } nod_state;
-
-            // TODO: figure out a 'block saving mechanism'
-            // for now a ptr to the first block would be fine
-            ns_block::Block begin;
+            ns_node::DevState dev_state;
+            ns_block::Block *dev_begin;
 
         public:
-            DevNode(MAC_ADDR nod_id)
-                : begin(ns_chain::ns_block::Block())
-            {
-                // todo: genesis block
-                // ch. if a genesis block is for the whole chain or per device
-                // if the chain -> figure out a propermway to initilize the 'head' field
-                // otherwise  -> just create a genesis block and assign the head there
-                // initialize genesis block
+            DeviceNode(int *_mac_addr);
 
-                // for now lets just create an empty block w/ an empty msgpool
+        public:
+            void SetState(ns_node::DevState);
+            unsigned GetState();
 
-               flags = 0;
-               unique_id = nod_id;
-               nod_state = IDLE;
-            }
-            ~DevNode();
+            void Loop();
+
         };
     }
-
 }
 
-#endif // header lock
+#endif // _BLOCK_H

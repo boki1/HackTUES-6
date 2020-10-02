@@ -7,7 +7,7 @@
 #define HASH_FUNC(f)
 #define HASH_FUNC_LENGTH    0
 #define HASH    const char *const *
-#define DS      void * // digital signature
+#define DS      void * // digital digital_sign
 #define MAC_ADDR   const char *const *
 
 
