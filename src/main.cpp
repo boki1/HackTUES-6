@@ -1,5 +1,5 @@
 #include "../inc/block.h"
-#include "../inc/encryption.h"
+#include "../inc/cryptography.h"
 
 int main() {
 

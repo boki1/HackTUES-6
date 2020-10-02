@@ -6,36 +6,43 @@
 #include <assert.h>
 #include <cstring>
 
-#include "crypt_interface.h"
+#include "internal.h"
+#include "cryptography.h"
 
 namespace ns_chain {
 
     namespace ns_block {
 
-        class Message {
+        class Entry {
 
         public:
-            Message();
-            Message(const char *, DS);
+            enum EntryFlags {
+                NotValidated = 0,
+                IsValidated
+            };
+
+        public:
+            Entry();
+            Entry(Msg, Ds, Timestamp, Flags);
+
+            Entry &operator=(Entry &other);ww
 
         private:
-            static const char MSG_BYTES = 3;
-
-            char msg_data[MSG_BYTES]; // TODO: figure out some 'protocol' for the data stored in the data field
+            char msg[2];
+            crypto::DigitalSignature ds;
             time_t timestamp;
-            DS digital_sign;
-            uint8_t flags;
+            char flags;
         };
 
-        class MessagePool {
+        class EntryPool {
 
         private:
-            // todo: set some usable value
-            static const int N_MESG_POOL = 0;
-            Message pool[N_MESG_POOL];
+            Entry pool[BLOCK_ENTRIES];
+            size_t length;
 
         public:
-            MessagePool();
+            EntryPool();
+            EntryPool(Entry _pool[]);
         };
 
         class BlockHeader {
@@ -52,7 +59,7 @@ namespace ns_chain {
         class Block {
 
         private:
-            MessagePool bl_pool;
+            EntryPool bl_pool;
             BlockHeader bl_header;
 
         public:
@@ -80,11 +87,9 @@ namespace ns_chain {
 
         static const unsigned short MAC_BYTES = 2;
 
-        // todo:
-        // make sure the masks are appropriate for the data type of the arguments
         static int *MACAddr(int _ints[], int count) {
             assert(count == 6);
-            int *mac = new int[2];
+            int *mac = new int[MAC_BYTES];
             mac[0] = (0x0 | (_ints[0] & 0xFF000000));
             mac[0] |= (_ints[1] & 0x00FF0000);
             mac[0] |= (_ints[2] & 0x0000FF00);

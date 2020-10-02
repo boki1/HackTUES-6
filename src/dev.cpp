@@ -1,3 +1,4 @@
+#include <iostream>
 #include "../inc/block.h"
 
 
@@ -26,7 +27,10 @@ namespace ns_chain {
     void DeviceNode::Loop() {
 
         while (this->GetState() != D_TERMINATE) {
-           // do stuff
+
+            // do stuff
+
+//            std::cout << "Receiving ..." << std::endl;
         }
 
     }
