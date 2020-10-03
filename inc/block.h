@@ -6,6 +6,8 @@
 #include <assert.h>
 #include <cstring>
 
+#include <queue>
+
 #include "internal.h"
 #include "cryptography.h"
 
@@ -82,26 +84,30 @@ namespace ns_chain {
 
         };
 
-        class Message
-        {
-        private: 
-            char *msg;
-
-        public:
-            Message();
-            Message(char *);
-        };
-
     }
 
     namespace ns_node {
 
+        namespace mining {
+
+            class Miner {
+
+            public:
+                Miner(int *mac_addr_t);
+                Miner();
+
+            private:
+                int mac_addr[2];
+            };
+
+        }
+
         enum DevState {
             IDLE = 0,
+            BUSY,
             BL_RECV,
             BL_TRNS,
             BL_VERF,
-
             D_TERMINATE
         } ;
 
@@ -119,11 +125,32 @@ namespace ns_chain {
             return mac;
         }
 
-        class DeviceNode {
+        class DevRequest {
+        public:
+            enum Type {
+                PENDING_BLOCK,
+                PENDING_ENTRY,
+            };
 
+        public:
+            DevRequest() = default;
+            DevRequest(enum Type t);
+
+            bool Transmit();
+            void Handle(const char *, enum Type);
+
+            enum Type GetType() const;
+
+        private:
+            enum Type dev_rq_type;
+            char *buf;
+        };
+
+        class DeviceNode {
         private:
             // MAC is actually 6B, but we get 8B
             int dev_mac[2];
+            std::queue<DevRequest> dev_q_pending;
 
             ns_node::DevState dev_state;
             ns_block::Block *dev_begin;
@@ -135,9 +162,12 @@ namespace ns_chain {
             void SetState(ns_node::DevState);
             unsigned GetState();
 
-            void Loop();
+            void EnqueueRequest(enum DevRequest::Type);
+            enum DevRequest::Type DequeueRequest();
 
+            void Loop();
         };
+
     }
 }
 
