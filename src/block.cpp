@@ -10,5 +10,10 @@ namespace ns_chain {
     }
 
     BlockHeader &BlockHeader::operator=(const BlockHeader &other) = default;
+    
+    char *Entry::GetMessage()
+    {
+        return this->msg;
+    }
 }
 

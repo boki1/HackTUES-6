@@ -65,6 +65,8 @@ namespace crypto {
 
         int GetPublicKey();
 
+        int EuclideanGCD(int, int);
+
         DSign Sign(ns_chain::ns_block::Entry &);
 
         bool Verify(ns_chain::ns_block::Entry &entry);

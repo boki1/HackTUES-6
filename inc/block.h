@@ -25,10 +25,12 @@ namespace ns_chain {
             Entry();
             Entry(Msg, Ds, Timestamp, Flags);
 
-            Entry &operator=(Entry &other);ww
+            Entry &operator=(Entry &other);
+
+            char *GetMessage();
 
         private:
-            char msg[2];
+            crypto::Type_msg msg;
             crypto::DigitalSignature ds;
             time_t timestamp;
             char flags;

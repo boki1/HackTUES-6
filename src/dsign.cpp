@@ -22,6 +22,15 @@ namespace crypto {
         return this->ds_k_Public;
     }
 
+    int DigitalSignature::EuclideanGCD(int num1, int num2)
+    {
+        if (num1 == 0)
+        {
+            return num2;
+        }
+        return EuclideanGCD(num2 % num1, num1);
+    }
+
     DigitalSignature::DSign DigitalSignature::Sign(ns_chain::ns_block::Entry &entry) {
 
         ull k, r = 0, tmp;
@@ -31,17 +40,26 @@ namespace crypto {
             r = tmp % this->ds_param.q;
         }
 
+        HashManager h_manager;
+        
         ull s = 0;
         ull tmp1;
         while (s == 0) {
             k = (rand() % (this->ds_param.q - 1)) + 1;
             tmp1 = this->ds_k_Secret * r;
 
-            /*eucledion algorithm*/
+            ull i = EuclideanGCD(k, this->ds_param.q);  
+
+            ull hashed_msg = h_manager.DoHash(entry.GetMessage()); 
+
+            s = i*(hashed_msg + tmp1) % this->ds_param.q;              
 
         }
 
-        return 0;
+        this->ds_val.r = r;
+        this->ds_val.s = s; 
+
+        return this->ds_val;
     }
 
     bool DigitalSignature::Verify(ns_chain::ns_block::Entry &entry) {
