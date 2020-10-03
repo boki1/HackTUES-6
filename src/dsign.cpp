@@ -1,6 +1,9 @@
 #include <cstdlib>
 #include <cmath>
 #include <cassert>
+#include <functional>
+
+#include <block.h>
 
 #include "../inc/cryptography.h"
 #include "../inc/internal.h"
@@ -29,10 +32,9 @@ namespace crypto {
         this->ds_k_Secret = other.ds_k_Secret;
         this->ds_val = other.ds_val;
         return *this;
-    }
+	}
 
-    DigitalSignature::DSign DigitalSignature::Sign(ns_chain::ns_block::Entry &entry) {
-
+    DigitalSignature::DSign DigitalSignature::Sign(ns_chain::ns_block::Entry entry) {
         ull k, r = 0, tmp;
         while (r == 0) {
             k = (rand() % (this->ds_param.q - 1)) + 1;
@@ -40,17 +42,32 @@ namespace crypto {
             r = tmp % this->ds_param.q;
         }
 
+        HashManager h_manager;
+
+		std::function<int(int, int)> gcd;
+		gcd = [&gcd](int a, int b) -> int {
+			if (a == 0) return b;
+			return gcd(b % a, a);
+		};
+        
         ull s = 0;
         ull tmp1;
         while (s == 0) {
             k = (rand() % (this->ds_param.q - 1)) + 1;
             tmp1 = this->ds_k_Secret * r;
 
-            /*eucledion algorithm*/
+            ull i = gcd(k, this->ds_param.q);
+            ull hashed_msg = h_manager.DoHash(entry.GetMessage());
+
+            s = i*(hashed_msg + tmp1) % this->ds_param.q;              
 
         }
 
         return DEFAULT_DS_VALUE;
+//      this->ds_val.r = r;
+//      this->ds_val.s = s;
+//
+//      return this->ds_val;
     }
 
     bool DigitalSignature::Verify(ns_chain::ns_block::Entry &entry) {

@@ -1,5 +1,3 @@
-#include <iostream>
-
 int EuclideanGCD(int num1, int num2)
 {
     if (num1 == 0)

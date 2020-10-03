@@ -6,13 +6,11 @@ namespace ns_chain {
 
     using namespace ns_block;
 
-    Entry::Entry(char *msg)
+    Entry::Entry(int msg)
     {
         this->timestamp = time(nullptr);
         this->flags = 0;
-        if (msg) {
-            memcpy(this->msg, msg, MSG_BYTES);
-        }
+        this->msg = msg;
         // leave 'ds' in this constructor
     }
 
@@ -20,7 +18,8 @@ namespace ns_chain {
         this->flags = other.flags;
         this->timestamp = other.flags;
         this->ds = other.ds;
-        memcpy(this->msg, other.msg, MSG_BYTES);
+        this->msg = other.msg;
+        return *this;
     }
 
     EntryPool::EntryPool() {
@@ -32,6 +31,7 @@ namespace ns_chain {
             // new block
         }
         this->pool[length++] = entry;
+        return false;
     }
 
     void Entry::GetSigned(crypto::DigitalSignature &sign)
@@ -50,6 +50,7 @@ namespace ns_chain {
             this->pool[i] = (Entry &) other.pool[i];
         }
 
+        return *this;
     }
 
 }

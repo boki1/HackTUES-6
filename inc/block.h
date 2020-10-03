@@ -24,13 +24,15 @@ namespace ns_chain {
             void GetSigned(crypto::DigitalSignature &);
 
         public:
-            Entry(char *msg=nullptr);
+            Entry(int msg=-1);
             // Entry(crypto::Type_msg, DigitalSignature, time_ , Flags);
 
             Entry &operator=(Entry &other); //= default;
 
+            crypto::Type_msg GetMessage();
+
         private:
-            char msg[2];
+            crypto::Type_msg msg;
             crypto::DigitalSignature ds;
             time_t timestamp;
             char flags;
