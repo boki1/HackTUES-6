@@ -9,8 +9,8 @@ namespace crypto {
         this->hash_function = _h;
     }
 
-    Type_hash HashManager::DoHash(Type_msg msg) {
-        return this->hash_function(msg);
+    ull HashManager::DoHash(Type_msg msg) {
+        return this->Hash(msg);
     }
 
 }

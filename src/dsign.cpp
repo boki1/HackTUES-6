@@ -32,9 +32,31 @@ namespace crypto {
         this->ds_k_Secret = other.ds_k_Secret;
         this->ds_val = other.ds_val;
         return *this;
-	}
+    }
+    int DigitalSignature::EuclideanGCD(int num1, int num2)
+    {   
+        if(num1 == 0)
+        {
+            return num2;
+        }
 
-    DigitalSignature::DSign DigitalSignature::Sign(ns_chain::ns_block::Entry entry) {
+        return EuclideanGCD(num2 % num1, num1);
+    }
+
+    int DigitalSignature::BruteForceModMult(int num1, int num2)
+    {
+        int curr = 1;
+
+        while(num1 * curr % num2 != 1)
+        {
+            curr++;
+        }
+    
+        return curr;
+    }
+
+    DigitalSignature::DSign DigitalSignature::Sign(ns_chain::ns_block::Entry &entry) {
+        
         ull k, r = 0, tmp;
         while (r == 0) {
             k = (rand() % (this->ds_param.q - 1)) + 1;
@@ -56,23 +78,38 @@ namespace crypto {
             k = (rand() % (this->ds_param.q - 1)) + 1;
             tmp1 = this->ds_k_Secret * r;
 
-            ull i = gcd(k, this->ds_param.q);
-            ull hashed_msg = h_manager.DoHash(entry.GetMessage());
+            int i = BruteForceModMult(k, this->ds_param.q);  
+
+            ull hashed_msg = h_manager.DoHash(entry.GetMessage()); 
 
             s = i*(hashed_msg + tmp1) % this->ds_param.q;              
 
         }
 
-        return DEFAULT_DS_VALUE;
-//      this->ds_val.r = r;
-//      this->ds_val.s = s;
-//
-//      return this->ds_val;
+        this->ds_val.r = r;
+        this->ds_val.s = s;
+
+        return this->ds_val;
     }
 
-    bool DigitalSignature::Verify(ns_chain::ns_block::Entry &entry) {
-        return false;
+    bool DigitalSignature::Verify(ns_chain::ns_block::Entry &entry) 
+    {
+        if (!(this->ds_val.r > 0 && this->ds_param.q > this->ds_val.r) || !(this->ds_val.s > 0 && this->ds_param.q > this->ds_val.s))
+        {
+            return 0;
+        }
+
+        HashManager h_manager;
+        int w = BruteForceModMult(this->ds_val.s, this->ds_param.q);
+        ull hashed_msg = h_manager.DoHash(entry.GetMessage());
+        ull u1 = hashed_msg * w % this->ds_param.q;
+        ull u2 = this->ds_val.r * w % this->ds_param.q;
+        ull v = ((int)pow(this->ds_param.g, u1) * (int)pow(this->GetPublicKey(), u2) % this->ds_param.p) % this->ds_param.q;
+
+        return v == this->ds_val.r;
+
     }
+
 
     DigitalSignature::SecretKey DigitalSignature::GenerateSecretK
             (DigitalSignature::Params &params) {

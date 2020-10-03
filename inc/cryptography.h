@@ -10,7 +10,7 @@ namespace crypto {
 
     class HashManager {
 
-        typedef Type_hash (*f_hash)(Type_msg);
+        typedef ull (*f_hash)(Type_msg);
 
         static const unsigned HASH_LENGTH = 64;
 
@@ -22,7 +22,7 @@ namespace crypto {
         HashManager(f_hash=nullptr);
 
     public:
-        Type_hash DoHash(Type_msg);
+        ull DoHash(Type_msg);
     };
 
     class DigitalSignature {
@@ -69,7 +69,9 @@ namespace crypto {
 
         int EuclideanGCD(int, int);
 
-        DSign Sign(ns_chain::ns_block::Entry entry);
+        int BruteForceModMult(int, int);
+
+        DSign Sign(ns_chain::ns_block::Entry &);
 
         bool Verify(ns_chain::ns_block::Entry &entry);
     };

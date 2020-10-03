@@ -82,6 +82,16 @@ namespace ns_chain {
 
         };
 
+        class Message
+        {
+        private: 
+            char *msg;
+
+        public:
+            Message();
+            Message(char *);
+        };
+
     }
 
     namespace ns_node {

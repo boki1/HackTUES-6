@@ -19,5 +19,16 @@ namespace ns_chain {
     crypto::Type_msg Entry::GetMessage() {
         return this->msg;
     }
+
+    Block &Block::BuildBlock(const BlockHeader &_header, const EntryPool &_pool) {
+        this->bl_header = _header;
+        this->bl_pool = _pool;
+        return *this;
+    }
+
+    Message::Message(char *msg)
+    {
+        this -> msg = msg;
+    }
 }
 
