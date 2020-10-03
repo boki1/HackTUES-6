@@ -3,6 +3,7 @@
 #include <cassert>
 
 #include "../inc/cryptography.h"
+#include "../inc/internal.h"
 
 namespace crypto {
 
@@ -21,10 +22,6 @@ namespace crypto {
         return this->ds_k_Public;
     }
 
-    bool DigitalSignature::Verify() {
-        return true;
-    }
-
     DigitalSignature::DSign DigitalSignature::Sign(ns_chain::ns_block::Entry &entry) {
 
         ull k, r = 0, tmp;
@@ -40,14 +37,15 @@ namespace crypto {
             k = (rand() % (this->ds_param.q - 1)) + 1;
             tmp1 = this->ds_k_Secret * r;
 
-            int hashed_msg /*hashing function with argument message*/;
-
-
-            s = ((tmp + hashed_msg) / k) % this->ds_param.q;
+            /*eucledion algorithm*/
 
         }
 
         return 0;
+    }
+
+    bool DigitalSignature::Verify(ns_chain::ns_block::Entry &entry) {
+        if(!(this -> ds_param.q >= this ->))
     }
 
     DigitalSignature::SecretKey DigitalSignature::GenerateSecretK

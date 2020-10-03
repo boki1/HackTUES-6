@@ -30,7 +30,10 @@ namespace crypto {
         typedef ull SecretKey;
         typedef ull PublicKey;
 
-        typedef ull DSign;
+        typedef struct {
+            ull r;
+            ull s; 
+        } DSign;
 
         static const unsigned g_InvalidValue = 1;
 
@@ -64,7 +67,7 @@ namespace crypto {
 
         DSign Sign(ns_chain::ns_block::Entry &);
 
-        bool Verify();
+        bool Verify(ns_chain::ns_block::Entry &entry);
     };
 
 }
