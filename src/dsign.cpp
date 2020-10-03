@@ -33,29 +33,20 @@ namespace crypto {
         this->ds_val = other.ds_val;
         return *this;
     }
-    int DigitalSignature::EuclideanGCD(int num1, int num2)
-    {   
-        if(num1 == 0)
-        {
-            return num2;
-        }
-
-        return EuclideanGCD(num2 % num1, num1);
-    }
 
     int DigitalSignature::BruteForceModMult(int num1, int num2)
     {
         int curr = 1;
 
-        while(num1 * curr % num2 != 1)
-        {
-            curr++;
-        }
+            while(num1 * curr % num2 != 1)
+            {
+                 curr++;
+            }
     
-        return curr;
+            return curr;
     }
 
-    DigitalSignature::DSign DigitalSignature::Sign(ns_chain::ns_block::Entry &entry) {
+    DigitalSignature::DSign *DigitalSignature::Sign(ns_chain::ns_block::Entry &entry) {
         
         ull k, r = 0, tmp;
         while (r == 0) {
@@ -65,12 +56,6 @@ namespace crypto {
         }
 
         HashManager h_manager;
-
-		std::function<int(int, int)> gcd;
-		gcd = [&gcd](int a, int b) -> int {
-			if (a == 0) return b;
-			return gcd(b % a, a);
-		};
         
         ull s = 0;
         ull tmp1;
@@ -89,7 +74,7 @@ namespace crypto {
         this->ds_val.r = r;
         this->ds_val.s = s;
 
-        return this->ds_val;
+        return &(this->ds_val);
     }
 
     bool DigitalSignature::Verify(ns_chain::ns_block::Entry &entry) 

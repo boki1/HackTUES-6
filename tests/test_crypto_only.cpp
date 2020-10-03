@@ -1,15 +1,18 @@
 class TestCryptography {
 
-	static bool TestDigitalSignatureSign() {
+	static bool TestDigitalSignatureSign(const int p, const int q, const int msg, const int g) 
+	{
 		return false;
 	}
 
-	static bool TestDigitalSignatureVerify() {
+	static bool TestDigitalSignatureVerify() 
+	{
 		return false;
 	}
 };
 
-int main() {
+int main() 
+{
 
 	return 0;
 }

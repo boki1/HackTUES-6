@@ -53,6 +53,8 @@ namespace crypto {
 
         PublicKey GeneratePublicK(const Params &, const SecretKey);
 
+        static int BruteForceModMult(int num1, int num2);
+
         SecretKey ds_k_Secret;
         PublicKey ds_k_Public;
         Params ds_param;
@@ -67,11 +69,7 @@ namespace crypto {
 
         int GetPublicKey() const;
 
-        int EuclideanGCD(int, int);
-
-        int BruteForceModMult(int, int);
-
-        DSign Sign(ns_chain::ns_block::Entry &);
+        DSign *Sign(ns_chain::ns_block::Entry &);
 
         bool Verify(ns_chain::ns_block::Entry &entry);
     };
