@@ -21,13 +21,15 @@ namespace ns_chain {
                 IsValidated
             };
 
+            void GetSigned(crypto::DigitalSignature &);
+
         public:
-            Entry();
-            Entry(Msg, Ds, Timestamp, Flags);
+            Entry(int msg=-1);
+            // Entry(crypto::Type_msg, DigitalSignature, time_ , Flags);
 
-            Entry &operator=(Entry &other);
+            Entry &operator=(Entry &other); //= default;
 
-            char *GetMessage();
+            crypto::Type_msg GetMessage();
 
         private:
             crypto::Type_msg msg;
@@ -36,16 +38,21 @@ namespace ns_chain {
             char flags;
         };
 
-        class EntryPool {
+        class Block;
 
+        class EntryPool {
         private:
             Entry pool[BLOCK_ENTRIES];
             size_t length;
 
         public:
+            EntryPool &operator=(const EntryPool &);
+
+        public:
             EntryPool();
-            EntryPool(Entry _pool[]);
+            bool EntryPoolAdd(Entry &);
         };
+
 
         class BlockHeader {
 
@@ -54,8 +61,10 @@ namespace ns_chain {
             BlockHeader &operator=(const BlockHeader &other);
 
         private:
-            HASH nonce;
-            HASH previous;
+            crypto::Type_hash nonce;
+            crypto::Type_hash previous;
+
+            crypto::Type_hash selfhash;
         };
 
         class Block {
@@ -66,12 +75,21 @@ namespace ns_chain {
 
         public:
             Block() {}
-
             Block &operator=(Block &other) = default;
 
         public:
+            Block &BuildBlock(const BlockHeader &, const EntryPool &);
 
+        };
 
+        class Message
+        {
+        private: 
+            char *msg;
+
+        public:
+            Message();
+            Message(char *);
         };
 
     }

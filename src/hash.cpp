@@ -6,11 +6,11 @@
 namespace crypto {
 
     HashManager::HashManager(f_hash _h) {
-        this->Hash = _h;
+        this->hash_function = _h;
     }
 
-    void HashManager::DoHash(Type_msg msg) {
-        this->Hash(msg);
+    ull HashManager::DoHash(Type_msg msg) {
+        return this->Hash(msg);
     }
 
 }

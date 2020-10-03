@@ -1,27 +1,28 @@
 #ifndef ENCRYPTION_H
 #define ENCRYPTION_H
 
-#include "block.h"
 #include "internal.h"
 
 namespace crypto {
 
-    typedef ns_chain::ns_block::Message Type_msg;
+    typedef int Type_msg;
+    typedef ull Type_hash;
 
     class HashManager {
 
-        typedef void (*f_hash)(Type_msg);
+        typedef ull (*f_hash)(Type_msg);
 
         static const unsigned HASH_LENGTH = 64;
 
     private:
-        f_hash Hash;
+        f_hash hash_function;
+        Type_hash stored_hash;
 
     public:
-        HashManager(f_hash= nullptr);
+        HashManager(f_hash=nullptr);
 
     public:
-        void DoHash(Type_msg);
+        ull DoHash(Type_msg);
     };
 
     class DigitalSignature {
@@ -30,10 +31,10 @@ namespace crypto {
         typedef ull SecretKey;
         typedef ull PublicKey;
 
-        typedef struct {
+        struct DSign {
             ull r;
-            ull s; 
-        } DSign;
+            ull s;
+        } DEFAULT_DS_VALUE = {.r=0, .s=0};
 
         static const unsigned g_InvalidValue = 1;
 
@@ -59,13 +60,16 @@ namespace crypto {
 
     public:
         DigitalSignature();
+        DigitalSignature &operator=(const DigitalSignature &);
 
     public:
         void GenerateUserKeys();
 
-        int GetPublicKey();
+        int GetPublicKey() const;
 
         int EuclideanGCD(int, int);
+
+        int BruteForceModMult(int, int);
 
         DSign Sign(ns_chain::ns_block::Entry &);
 
