@@ -15,7 +15,6 @@ namespace tests {
             return 1;
         }
 
-        static
 
     };
 }

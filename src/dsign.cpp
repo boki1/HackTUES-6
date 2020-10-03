@@ -26,7 +26,7 @@ namespace crypto {
     }
 
     DigitalSignature::DSign DigitalSignature::Sign(ns_chain::ns_block::Entry &entry) {
-        /*
+
         ull k, r = 0, tmp;
         while (r == 0) {
             k = (rand() % (this->ds_param.q - 1)) + 1;
@@ -37,18 +37,15 @@ namespace crypto {
         ull s = 0;
         ull tmp1;
         while (s == 0) {
-            k = (rand() % (this->param.q - 1)) + 1;
-            tmp1 = this->ds_Secret * r;
+            k = (rand() % (this->ds_param.q - 1)) + 1;
+            tmp1 = this->ds_k_Secret * r;
 
-        */
-        /*
-         * TODO:
-         * Here must be placed a proper implementation of the extended
-         * euclidean algorithm in order to calculate the inverse modular
-         * inverse multiplicative which is needed here.
-         */
+            int hashed_msg /*hashing function with argument message*/;
 
-        // }
+
+            s = ((tmp + hashed_msg) / k) % this->ds_param.q;
+
+        }
 
         return 0;
     }
