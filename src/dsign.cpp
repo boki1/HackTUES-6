@@ -8,7 +8,7 @@
 namespace crypto {
 
     DigitalSignature::DigitalSignature()
-            : ds_k_Secret(0), ds_k_Public(0), ds_val(0), ds_param(DEFAULT_PARAMS) {}
+            : ds_k_Secret(0), ds_k_Public(0), ds_val(DEFAULT_DS_VALUE), ds_param(DEFAULT_PARAMS) {}
 
     void DigitalSignature::GenerateUserKeys() {
         SecretKey x = GenerateSecretK(this->ds_param);
@@ -18,8 +18,17 @@ namespace crypto {
         this->ds_k_Secret = x;
     }
 
-    int DigitalSignature::GetPublicKey() {
+    int DigitalSignature::GetPublicKey() const {
         return this->ds_k_Public;
+    }
+
+    DigitalSignature &DigitalSignature::operator=(const DigitalSignature &other)
+    {
+        this->ds_k_Public = other.ds_k_Public;
+        this->ds_param = other.ds_param;
+        this->ds_k_Secret = other.ds_k_Secret;
+        this->ds_val = other.ds_val;
+        return *this;
     }
 
     DigitalSignature::DSign DigitalSignature::Sign(ns_chain::ns_block::Entry &entry) {
@@ -41,11 +50,11 @@ namespace crypto {
 
         }
 
-        return 0;
+        return DEFAULT_DS_VALUE;
     }
 
     bool DigitalSignature::Verify(ns_chain::ns_block::Entry &entry) {
-        if(!(this -> ds_param.q >= this ->))
+        return false;
     }
 
     DigitalSignature::SecretKey DigitalSignature::GenerateSecretK

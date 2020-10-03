@@ -6,6 +6,16 @@ namespace ns_chain {
 
     using namespace ns_block;
 
+    Entry::Entry(char *msg)
+    {
+        this->timestamp = time(nullptr);
+        this->flags = 0;
+        if (msg) {
+            memcpy(this->msg, msg, MSG_BYTES);
+        }
+        // leave 'ds' in this constructor
+    }
+
     Entry &Entry::operator=(Entry &other) {
         this->flags = other.flags;
         this->timestamp = other.flags;
@@ -13,30 +23,33 @@ namespace ns_chain {
         memcpy(this->msg, other.msg, MSG_BYTES);
     }
 
-    EntryPool::EntryPool() = default;
-
-    EntryPool::EntryPool(Entry _pool[], size_t _length) {
-        this->length = _length;
-        for (int i = 0; i < _length; ++i) {
-            this->pool = _pool[i];
-        }
-    }
-
-    Message::Message(const char *_msg_data, DS dig_sign) {
-        memcpy(this->msg_data, _msg_data, this->MSG_BYTES * sizeof(*this->msg_data));
-        this->timestamp = std::time(nullptr);
-        this->digital_sign = dig_sign;
-
-        // Consider marking some thinks here such as:
-        // digital signature assigned
-        // msg assigned
-        this->flags = 0;
-    }
-
     EntryPool::EntryPool() {
-        for (auto msg: this->pool) {
-            msg = Message();
+        this->length = 0;
+    }
+
+    bool EntryPool::EntryPoolAdd(Entry &entry) {
+        if (this->length + 1 >= BLOCK_ENTRIES) {
+            // new block
         }
+        this->pool[length++] = entry;
+    }
+
+    void Entry::GetSigned(crypto::DigitalSignature &sign)
+    {
+       return;
+    }
+
+    EntryPool &EntryPool::operator=(const EntryPool &other)
+    {
+
+        for (auto &i : this->pool) {
+            i.~Entry();
+        }
+
+        for (int i = 0; i < other.length; ++i) {
+            this->pool[i] = (Entry &) other.pool[i];
+        }
+
     }
 
 }

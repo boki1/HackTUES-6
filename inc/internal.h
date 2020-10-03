@@ -11,7 +11,7 @@ typedef unsigned long long ull;
 
 #define MSG_BYTES               3
 
-namespace ns_chain { namespace ns_block { class Message; } }
+namespace ns_chain { namespace ns_block { class Entry; } }
 namespace crypto { class DigitalSignature; }
 
-#endif //HACKTUES_6_INTERNAL_H
+#endif // HACKTUES_6_INTERNAL_H

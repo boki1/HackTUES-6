@@ -1,30 +1,23 @@
-# This type of builds are used only w/ code unrelated to the hardware we are currently using
-#
-#
-
 INC_DIR=inc/
 SRC_DIR=src/
+TESTS_DIR=tests/
 
 CPPFLAGS=-Wextra -g
 CPP=g++
 
 OBJ=main.o
+OBJ_TESTS=$(patsubst %.c, %.o, $(wildcard TESTS_DIR/*.c))
 
-EXE=a.out
+EXE_DEBUG=a.out
+DEPS=INC_DIR/block.h INC_DIR/internal.h INC_DIR/cryptography.h
 
-main.o: src/main.cpp src/encryption.cpp
-	$(CPP) $(CPPFLAGS) -c $< -o $@
+all: $(EXE_DEBUG) 
 
-# %.o: src/%.cpp
-#	$(CPP) $(CPPFLAGS) -c $< -o $@
-
-a.out: %.o 
-	$(CPP) $(CPPFLAGS) $< $(OBJ) -o $@
-
-all: $(EXE) 
+test: 
+	(cd $(TESTS_DIR); make tests)
 	
 clean:
 	[ -f "*.o" ] && rm *.o
 	[ -f "*.out" ] && rm .out
 
-PHONY: clean all
+PHONY: clean all tests
