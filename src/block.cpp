@@ -9,9 +9,14 @@ namespace ns_chain {
     }
 
     BlockHeader &BlockHeader::operator=(const BlockHeader &other) = default;
-    
-    crypto::Type_msg Entry::GetMessage()
-    {
+
+    Block &Block::BuildBlock(const BlockHeader &_header, const EntryPool &_pool) {
+        this->bl_header = _header;
+        this->bl_pool = _pool;
+        return *this;
+    }
+
+    crypto::Type_msg Entry::GetMessage() {
         return this->msg;
     }
 
