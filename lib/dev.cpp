@@ -52,7 +52,7 @@ namespace ns_chain {
     }
 
     DevRequest::DevRequest(enum Type t)
-            : dev_rq_type(t) {}
+            : dev_rq_type(t), buf(0) {}
 
     void DeviceNode::EnqueueRequest(enum DevRequest::Type t)
     {
@@ -69,7 +69,7 @@ namespace ns_chain {
     {
        return false;
     }
-    
+
     void Handle(const char *buff, DevRequest::Type r_type)
     {
         (void *) buff;

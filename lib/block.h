@@ -164,7 +164,7 @@ namespace ns_chain {
 
             void EnqueueRequest(enum DevRequest::Type);
             enum DevRequest::Type DequeueRequest();
-
+            DeviceNode &ChainWith(ns_block::Block &bl);
             void Loop();
         };
 
