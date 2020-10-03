@@ -10,7 +10,7 @@ namespace crypto {
     }
 
     ull HashManager::DoHash(Type_msg msg) {
-        return this->Hash(msg);
+        return this->DoHash(msg);
     }
 
 }
