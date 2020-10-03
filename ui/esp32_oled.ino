@@ -3,22 +3,31 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #include "time.h"
-#define SCREEN_WIDTH 128
-#define SCREEN_HEIGHT 64
 
-#define OLED_RESET     -1
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+#include "esp32_oled_inn.ino"
 
-const int Button1 = 34;
-const int Button2 = 35;
-const int Button3 = 32;
+const static unsigned SCREEN_WIDTH = 128; 
+const static unsigned SCREEN_HEIGHT = 64;
 
-int button1State;
-int button2State;
-int button3State;
-int lastButton1State = LOW;
-int lastButton2State = LOW;
-int lastButton3State = LOW;
+const static unsigned C_BEGIN = 1;
+const static unsigned C_END = 5;
+
+#define OLED_RESET     (-1)
+#define ENDLESS_LOOP   for (; ; ;);
+
+#define LOG_WRITE(msg) \
+    Serial.println(F(msg)); 
+
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET); 
+
+enum ButtonNames { BT_MINUS, BT_SELECT, BT_PLUS };
+
+struct Button {
+	int id;
+	int state;
+	int prev_state;
+	int val;
+} buttons[3];
 
 unsigned long lastDebounceTime = 0; 
 unsigned long debounceDelay = 50;
@@ -30,7 +39,7 @@ TaskHandle_t Task1;
 const char* ssid       = "UltraCloudSolution";
 const char* password   = "kremi123";
 
-const char* ntpServer = "pool.ntp.org";
+const char *ntpServer = "pool.ntp.org";
 const long  gmtOffset_sec = 3600;
 const int   daylightOffset_sec = 3600;
 
@@ -44,83 +53,66 @@ void printLocalTime()
   Serial.println(&timeinfo, "%A, %B %d %Y %H:%M:%S");
 }
 
+void buttons_init() {
+  // buttons is global
+  buttons[0].id = BT_MINUS; buttons[1].id = BT_SELECT; buttons[2].id = BT_PLUS;
+  for (int i = 0; i < N_BUTTONS; ++i) {
+	pinMode(buttons[i], INPUT);
+	buttons[i].prev_state = LOW;
+  }
+}
+
+void display_init() 
+{ 
+	if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) { 
+	  LOG_WRITE("SSD1306 allocation failed");
+	  ENDLESS_LOOP
+  	}
+}
+
 void setup() {
   Serial.begin(115200);
-  pinMode(Button1, INPUT);
-  pinMode(Button2, INPUT);
-  pinMode(Button3, INPUT);
 
-//
-//  xTaskCreate(
-//    loading,    // Function that should be called
-//    "OLED",   // Name of the task (for debugging)
-//    1000,            // Stack size (bytes)
-//    NULL,            // Parameter to pass
-//    1,               // Task priority
-//    &OLED,
-//    0
-//  );
-  
+  buttons_init();
 
-  if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) { 
-    Serial.println(F("SSD1306 allocation failed"));
-    for(;;);
-  }
+  display_init();
+
   display.display();
   display.clearDisplay();
 }
 
-unsigned reg = 1,
-         reg_max = 3;
 
 void loop() {
-  int buttonMinus = digitalRead(Button1);
-  int buttonSelect = digitalRead(Button2);
-  int buttonPlus = digitalRead(Button3);
-  
-  if (buttonMinus != lastButton1State) {
-    // reset the debouncing timer
-    lastDebounceTime = millis();
+	
+  int cursor = C_BEGIN;
+  // int lastDebounceTime;
+
+  for (int i = 0; i < N_BUTTONS; ++i) {
+	buttons[i].val = digitalRead(buttons[i].id);		
+	if (buttons[i].val == buttons[i].state)
+  	  lastDebounceTime = millis();
+
+	if ((millis() - lastDebounceTime > debounceDelay)) {
+		if (buttons[i].val != buttons[i].state) {
+			buttons[i].state = buttons[i].val;
+			if (buttons[i].state == HIGH) switch (buttons[i].id) {
+					case BT_MINUS:
+						cursor = (cursor == C_BEGIN) ? C_END : cursor - 1; 
+						break;
+					case BT_SELECT:
+						LOG_WRITE("Select");
+						break;
+					case BT_PLUS:
+						cursor = (cursor == C_END) ? C_BEGIN : cursor + 1;
+						break;
+				}
+		}
+	}
+
+	buttons[i].state = buttons[i].val;
   }
 
-  if (buttonSelect != lastButton2State) {
-    // reset the debouncing timer
-    lastDebounceTime = millis();
-  }
-
-  if (buttonPlus != lastButton3State) {
-    // reset the debouncing timer
-    lastDebounceTime = millis();
-  }
-  if ((millis() - lastDebounceTime) > debounceDelay) {
-    if (buttonMinus != button1State) {
-      button1State = buttonMinus;
-      if (button1State == HIGH) {
-        reg -= 1;
-        
-        reg = (reg - 1) % reg_max + 1;
-       }
-    }
-
-    if (buttonSelect != button2State) {
-      button2State = buttonSelect;
-      if (button2State == HIGH) {
-        Serial.println("Select");
-      }
-    }
-
-    if (buttonPlus != button3State) {
-      button3State = buttonPlus;
-      if (button3State == HIGH) {
-        reg = (reg % reg_max) + 1;
-      }
-    }
-    
-  }
-  lastButton1State = buttonMinus;
-  lastButton2State = buttonSelect;
-  lastButton3State = buttonPlus;
-  drawNumbers(reg);
+  drawNumbers(cursor);
 }
 
 void drawText(char str[] ) {
