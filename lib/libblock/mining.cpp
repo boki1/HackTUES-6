@@ -1,5 +1,5 @@
-#include "../inc/block.h"
-#include "../inc/cryptography.h"
+#include "block.h"
+#include "cryptography.h"
 
 namespace mining {
 
