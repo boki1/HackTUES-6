@@ -1,13 +1,15 @@
-# ChaingeVote ### HackTUES-6 
+# ChaingeVote 
+
+### HackTUES-6 
 #### Introduction
-_So let's begin_ -------------------------
+_So let's begin_ 
 
 Hello, fellow stranger! Welcome to the home page of our latest project. The 
 occasion(???) is to compete in the yearly(???) students hackaton HackTUES. 
 So let's describe its basic goals and core functionalities.
 
 #### What is this about?
-_The Problem_ --------------------------
+_The Problem_ 
 
 Each voting, election, poll and such can be altered with the standard ways 
 they are realised. This is specifically true for elections of national scale 
@@ -18,7 +20,7 @@ right that many don't have. And that is the goal we are aiming at.
 
 --------------------------
 #### How to solve it?
-_The Solution_ --------------------------
+_The Solution_ 
 
 How 'ChaingeVote' solves this? Well, BLOCKCHAIN.
 What's blockchain? You should check [this](https://en.wikipedia.org/wiki/Blockchain).
@@ -40,7 +42,7 @@ This is short description of a complex system.
 
 --------------------------
 #### What's more to add?
-_The advancement_ --------------------------
+_The advancement_
 
 1. **Full transparency**
 > During the elections the votes are published to live user-friendly applications.
@@ -58,7 +60,7 @@ updated and expanded version of the current state of the system.
 
 --------------------------
 #### FAQ
-_Soo, about ..._ --------------------------
+_Soo, about ..._ 
 
 1. **A:** How do you suggest to implement the _second_ point from the previous part?
    **B:** An expansion to the system which provides live-calculated checksums of the
@@ -83,12 +85,15 @@ _Business enquiries_ --------------------------
 [Zahary Momchilov](https://github.com/ZaharyMomchilov)
 Contact info:
 	> zaharymomchilov@gmail.com
+	
 [Kamen Stefanov](https://github.com/kamenstefanov03)
 Contact info:
 	> kamenstefanov03@gmail.com
+
 [Stefan Bosev](https://github.com/StefanBosev)
 Contact info:
 	> stefan.bosev1@gmail.com
+
 [Kristiyan Stoimenov](https://github.com/boki1)
 Contact info:
 	> kristoimenov@gmail.com
