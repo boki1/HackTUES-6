@@ -4,8 +4,8 @@
 #### Introduction
 _So let's begin_ 
 
-Hello, fellow stranger! Welcome to the home page of our latest project. The 
-occasion(???) is to compete in the yearly(???) students hackaton HackTUES. 
+Hello, fellow stranger! Welcome to the home page of our latest project.
+This project originated to compete in the yearly students hackaton HackTUES. 
 So let's describe its basic goals and core functionalities.
 
 #### What is this about?
@@ -63,6 +63,7 @@ updated and expanded version of the current state of the system.
 _Soo, about ..._ 
 
 1. **A:** How do you suggest to implement the _second_ point from the previous part?
+
    **B:** An expansion to the system which provides live-calculated checksums of the
    			code running on the micro-controller. They can be compared to the ones
 			calculated from the open code repository.
