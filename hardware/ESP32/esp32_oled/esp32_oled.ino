@@ -8,9 +8,9 @@
 
 #define OLED_RESET     -1
 
-const int Button1 = 4;
-const int Button2 = 2;
-const int Button3 = 15;
+const int Button1 = 12;
+const int Button2 = 14;
+const int Button3 = 27;
 
 int button1State;
 int button2State;
@@ -31,8 +31,9 @@ void setup() {
   pinMode(Button2, INPUT);
   pinMode(Button3, INPUT);
   Serial.println("qwe");
-  //display.display();
-  //display.clearDisplay();
+  display.display();
+  display.clearDisplay();
+  loading(3);
 }
 
 unsigned reg = 1,
