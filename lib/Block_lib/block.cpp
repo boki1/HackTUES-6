@@ -1,4 +1,4 @@
-#include "../inc/block.h"
+#include "block.h"
 
 namespace ns_chain {
 
@@ -24,10 +24,10 @@ namespace ns_chain {
 
 
 
-    DevRequest &DequeueRequest()
-    {
+    // DevRequest &DequeueRequest()
+    // {
 
-    }
+    // }
 
 }
 

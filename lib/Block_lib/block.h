@@ -8,8 +8,7 @@
 
 #include <queue>
 
-#include "internal.h"
-#include "cryptography.h"
+#include "../Crypt_lib/cryptography.h"
 
 namespace ns_chain {
 

@@ -5,8 +5,7 @@
 
 #include <block.h>
 
-#include "../inc/cryptography.h"
-#include "../inc/internal.h"
+#include "cryptography.h"
 
 namespace crypto {
 

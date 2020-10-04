@@ -1,12 +1,13 @@
 #ifndef ENCRYPTION_H
 #define ENCRYPTION_H
 
-#include "internal.h"
-
 namespace crypto {
+    //Change definition of ull ul
+    typedef unsigned long long ull;
+    typedef unsigned long ul;
 
     typedef int Type_msg;
-    typedef ull Type_hash;
+    typedef unsigned long long Type_hash;
 
     class HashManager {
 
