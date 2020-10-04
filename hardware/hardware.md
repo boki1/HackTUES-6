@@ -6,7 +6,7 @@ The prototype of Chaingedvote uses ESP32s to create a peer-to-peer network to ho
 
 ## Schematics
 
-![Schematics](https://github.com/boki1/HackTUES-6/blob/main/hardware/schematics.pdf)
+![Schematics](https://github.com/boki1/HackTUES-6/blob/main/hardware/schematics.png)
 
 ## Future ideas
 
