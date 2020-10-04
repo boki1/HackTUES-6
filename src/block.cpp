@@ -20,9 +20,14 @@ namespace ns_chain {
         return this->msg;
     }
 
-    Message::Message(char *msg)
+
+
+
+
+    DevRequest &DequeueRequest()
     {
-        this -> msg = msg;
+
     }
+
 }
 
