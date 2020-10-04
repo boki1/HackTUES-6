@@ -93,7 +93,7 @@ _Contact info_:
 [Kamen Stefanov](https://github.com/kamenstefanov03)
 
 _Contact info_:
-	> kamenstefanov03@gmail.com
+	> kamenstefanov420@gmail.com
 
 [Stefan Bosev](https://github.com/StefanBosev)
 
