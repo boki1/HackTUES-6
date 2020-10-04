@@ -1,4 +1,4 @@
-# Chaingedvote hardware
+# ChaingedVote hardware
 
 ## Description
 
