@@ -7,6 +7,8 @@ typedef unsigned long long ull;
 typedef int Type_msg;
 typedef ull Type_hash;
 
+typedef byte char;
+
 class Entry;
 class DigitalSignature;
 

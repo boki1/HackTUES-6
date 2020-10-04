@@ -68,6 +68,11 @@ DevRequest *DeviceNode::DequeueRequest() {
 
 
 bool Transmit() {
+	this->
+	char *buf = new char[BUF_SIZE];
+	byte a
+	bool rv = esp_now_send(addr
+
     return false;
 }
 

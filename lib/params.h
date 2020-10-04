@@ -5,6 +5,8 @@
 #define BLK_STORAGE_SLOTS       128
 #define BLK_MOD_SLOTS           16
 
+#define BUF_SIZE                512
+
 #define NO_HASH (-1)
 #define INITIAL_COUNTER (0)
 

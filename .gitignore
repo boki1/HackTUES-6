@@ -1,4 +1,6 @@
 .comm
+makeEspArduino
+esp8266/
 
 # CLion
 .idea/
