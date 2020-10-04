@@ -1,4 +1,4 @@
-# ChaingeVote 
+# ChaingeVote 🗳️
 
 ### HackTUES-6 
 #### Introduction
