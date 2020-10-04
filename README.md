@@ -68,6 +68,8 @@ _Soo, about ..._
    			code running on the micro-controller. They can be compared to the ones
 			calculated from the open code repository.
 
+==============================
+
 2. **A:** How do you solve the problem with verifying blocks from the chain when
 		the system is implemented on a small micro-controllers?
 		
@@ -81,22 +83,26 @@ _Soo, about ..._
 
 --------------------------
 #### Contacts
-_Business enquiries_ --------------------------
+_Business enquiries_ 
 
 [Zahary Momchilov](https://github.com/ZaharyMomchilov)
-Contact info:
+
+_Contact info_:
 	> zaharymomchilov@gmail.com
 	
 [Kamen Stefanov](https://github.com/kamenstefanov03)
-Contact info:
+
+_Contact info_:
 	> kamenstefanov03@gmail.com
 
 [Stefan Bosev](https://github.com/StefanBosev)
-Contact info:
+
+_Contact info_:
 	> stefan.bosev1@gmail.com
 
 [Kristiyan Stoimenov](https://github.com/boki1)
-Contact info:
+
+_Contact info_:
 	> kristoimenov@gmail.com
 
 
